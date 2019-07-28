@@ -34,7 +34,7 @@ export class LoginScreen extends React.Component {
           mode="contained"
           onPress={this.props.onLogin}
         >
-          Зарегистрироваться
+          Войти
         </Button>
         <View
           style={{

@@ -10,11 +10,14 @@ export class HomeScreen extends React.Component {
     title: 'Главная',
   };
   state = {
-    isLogin: true,
+    isLogin: false,
   };
+  login = () => this.setState({ isLogin: true });
+  logout = () => this.setState({ isLogin: false });
   render() {
-    if (!this.state.isLogin)
-      return <LoginScreen onLogin={() => this.setState({ isLogin: true })} />;
+    const { isLogin } = this.state;
+    console.log(isLogin);
+    if (isLogin === false) return <LoginScreen onLogin={this.login} />;
     const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
@@ -32,7 +35,9 @@ export class HomeScreen extends React.Component {
           <Card color="#00B896">Результаты анализов</Card>
           <Card color="#FFC832">Настройки</Card>
         </Row>
-        <Card color="#009688">Записаться на приём к врачу</Card>
+        <Card color="#009688" onPress={this.logout}>
+          Записаться на приём к врачу
+        </Card>
       </View>
     );
   }
