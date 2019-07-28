@@ -1,19 +1,17 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Button } from 'react-native-material-ui';
+import { LoginScreen } from '../LoginScreen/LoginScreen';
+import { StatsScreen } from '../StatsScreen/StatsScreen';
 
 export class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Главная',
+  };
+  state = {
+    isLogin: false,
+  };
   render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Button
-          raised
-          primary
-          text="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-      </View>
-    );
+    if (!this.state.isLogin)
+      return <LoginScreen onLogin={() => this.setState({ isLogin: true })} />;
+    return <StatsScreen />;
   }
 }
