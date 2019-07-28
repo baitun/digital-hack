@@ -21,22 +21,26 @@ export class DeviceScreen extends React.Component {
   async startScan() {
     const ble = await this.ble.state();
     this.setState({ ble, isScanning: true, error: null, device: null });
-    this.ble.startDeviceScan([ fullUUID('FEE0') ], null, async (error, device) => {
-      if (error) {
+    this.ble.startDeviceScan(
+      [fullUUID('FEE0')],
+      null,
+      async (error, device) => {
+        if (error) {
+          this.setState({
+            error,
+            isScanning: false,
+          });
+          return;
+        }
+        await this.ble.stopDeviceScan();
         this.setState({
-          error,
+          error: null,
+          device,
           isScanning: false,
-        })
-        return;
+        });
+        this.setState({ error: null });
       }
-      await this.ble.stopDeviceScan();
-      this.setState({
-        error: null,
-        device,
-        isScanning: false,
-      })
-      this.setState({ error: null })
-    });
+    );
   }
 
   async stopScan() {
@@ -75,17 +79,23 @@ export class DeviceScreen extends React.Component {
         <View style={{ flex: 1 }}>
           <Button
             style={{ color: '#009688', textDecorationLine: 'underline' }}
-            onPress={() => { this.scan() }}
+            onPress={() => {
+              this.scan();
+            }}
           >
-            { this.state.isScanning ? 'Остановить поиск' : 'Найти вручную' }
+            {this.state.isScanning ? 'Остановить поиск' : 'Найти вручную'}
           </Button>
+          <Text style={{ textAlign: 'center' }}>{this.state.ble}</Text>
           <Text style={{ textAlign: 'center' }}>
-            {this.state.ble}
-          </Text>
-          <Text style={{ textAlign: 'center' }}>
-            { this.state.error ? this.state.error.toString() : 
-              this.state.device ? this.state.device.name +
-              ' ' + this.state.device.rssi + ' ' + this.state.device.id : '' }
+            {this.state.error
+              ? this.state.error.toString()
+              : this.state.device
+              ? this.state.device.name +
+                ' ' +
+                this.state.device.rssi +
+                ' ' +
+                this.state.device.id
+              : ''}
           </Text>
         </View>
       </View>
