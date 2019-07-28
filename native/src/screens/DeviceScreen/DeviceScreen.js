@@ -1,18 +1,48 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, PermissionsAndroid } from 'react-native';
 import { Button } from 'react-native-paper';
+import { BleManager, fullUUID } from 'react-native-ble-plx';
+import MiBand from '../../miBand';
 
 export class DeviceScreen extends React.Component {
-  state = {
-    isScanning: false,
+  constructor() {
+    super();
+
+    this.state = {
+      hasBleAccess: false,
+      isScanning: false,
+      ble: null,
+      error: null,
+    };
+
+    this.ble = new BleManager();
   }
 
-  startScan() {
-    this.setState({ isScanning: true });
+  async startScan() {
+    const ble = await this.ble.state();
+    this.setState({ ble, isScanning: true, error: null, device: null });
+    this.ble.startDeviceScan(null,  { allowDuplicates: false }, async (error, device) => {
+      if (error) {
+        this.setState({
+          error,
+          isScanning: false,
+        })
+        return;
+        await this.ble.stopDeviceScan();
+        this.setState({
+          error: null,
+          device,
+          isScanning: false,
+        })
+      }
+      this.setState({ error: null })
+    });
   }
 
-  stopScan() {
-    this.setState({ isScanning: false });
+  async stopScan() {
+    const ble = await this.ble.state();
+    await this.ble.stopDeviceScan();
+    this.setState({ ble, isScanning: false });
   }
 
   scan() {
@@ -49,6 +79,14 @@ export class DeviceScreen extends React.Component {
           >
             { this.state.isScanning ? 'Остановить поиск' : 'Найти вручную' }
           </Button>
+          <Text style={{ textAlign: 'center' }}>
+            {this.state.ble}
+          </Text>
+          <Text style={{ textAlign: 'center' }}>
+            { this.state.error ? this.state.error.toString() : 
+              this.state.device ? this.state.device.toString() :
+              this.state.devices ? this.state.devices.toString() : '' }
+          </Text>
         </View>
       </View>
     );
