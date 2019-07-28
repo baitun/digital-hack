@@ -3,6 +3,21 @@ import { Text, View, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 
 export class DeviceScreen extends React.Component {
+  state = {
+    isScanning: false,
+  }
+
+  startScan() {
+    this.setState({ isScanning: true });
+  }
+
+  stopScan() {
+    this.setState({ isScanning: false });
+  }
+
+  scan() {
+    this.state.isScanning ? this.stopScan() : this.startScan();
+  }
   render() {
     return (
       <View
@@ -28,8 +43,11 @@ export class DeviceScreen extends React.Component {
           </Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Button style={{ color: '#009688', textDecorationLine: 'underline' }}>
-            Найти вручную
+          <Button
+            style={{ color: '#009688', textDecorationLine: 'underline' }}
+            onPress={() => { this.scan() }}
+          >
+            { this.state.isScanning ? 'Остановить поиск' : 'Найти вручную' }
           </Button>
         </View>
       </View>
