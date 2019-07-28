@@ -1,9 +1,16 @@
 import { createStackNavigator } from 'react-navigation';
-import { DetailsScreen, HomeScreen, LoginScreen, StatsScreen } from './screens';
+import {
+  DetailsScreen,
+  HomeScreen,
+  LoginScreen,
+  StatsScreen,
+  DeviceScreen,
+} from './screens';
 
 export const AppNavigator = createStackNavigator(
   {
-    Home: { screen: HomeScreen },
+    // Home: { screen: HomeScreen },
+    Home: { screen: DeviceScreen },
     Stats: { screen: StatsScreen },
     Details: { screen: DetailsScreen },
     Login: { screen: LoginScreen },
