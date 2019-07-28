@@ -21,20 +21,20 @@ export class DeviceScreen extends React.Component {
   async startScan() {
     const ble = await this.ble.state();
     this.setState({ ble, isScanning: true, error: null, device: null });
-    this.ble.startDeviceScan(null,  { allowDuplicates: false }, async (error, device) => {
+    this.ble.startDeviceScan([ fullUUID('FEE0') ], null, async (error, device) => {
       if (error) {
         this.setState({
           error,
           isScanning: false,
         })
         return;
-        await this.ble.stopDeviceScan();
-        this.setState({
-          error: null,
-          device,
-          isScanning: false,
-        })
       }
+      await this.ble.stopDeviceScan();
+      this.setState({
+        error: null,
+        device,
+        isScanning: false,
+      })
       this.setState({ error: null })
     });
   }
@@ -84,8 +84,8 @@ export class DeviceScreen extends React.Component {
           </Text>
           <Text style={{ textAlign: 'center' }}>
             { this.state.error ? this.state.error.toString() : 
-              this.state.device ? this.state.device.toString() :
-              this.state.devices ? this.state.devices.toString() : '' }
+              this.state.device ? this.state.device.name +
+              ' ' + this.state.device.rssi + ' ' + this.state.device.id : '' }
           </Text>
         </View>
       </View>
