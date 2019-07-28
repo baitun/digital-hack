@@ -29,7 +29,9 @@ export class HomeScreen extends React.Component {
         </Row>
         <Row>
           <Card color="#FFC832">Питание</Card>
-          <Card color="#1B1B25">Внешние устройства</Card>
+          <Card color="#1B1B25" onPress={() => navigate('Device')}>
+            Внешние устройства
+          </Card>
         </Row>
         <Row>
           <Card color="#00B896">Результаты анализов</Card>
