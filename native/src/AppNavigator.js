@@ -9,8 +9,8 @@ import {
 
 export const AppNavigator = createStackNavigator(
   {
-    // Home: { screen: HomeScreen },
-    Home: { screen: DeviceScreen },
+    Home: { screen: HomeScreen },
+    Device: { screen: DeviceScreen },
     Stats: { screen: StatsScreen },
     Details: { screen: DetailsScreen },
     Login: { screen: LoginScreen },
